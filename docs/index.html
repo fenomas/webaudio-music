@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Song</title>
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+            font: 300 20px "Helvetica Neue", Meiryo, Helvetica, sans-serif;
+            margin: 1rem;
+        }
+
+        button,
+        input {
+            margin: 0.5rem;
+            font: inherit;
+        }
+
+        input[type="text"],
+        canvas {
+            outline: solid 1px gray;
+        }
+
+        .item {
+            display: block;
+            margin: 0.5rem;
+        }
+
+        .item-inline {
+            display: inline-block;
+            margin: 0.5rem;
+        }
+
+        label {
+            user-select: none;
+        }
+
+        .desc {
+            display: inline-block;
+            width: 100px;
+            text-align: end;
+        }
+
+        .play {
+            padding: 0.5rem;
+            width: 185px;
+        }
+
+        .log-holder {
+            border: solid 1px gray;
+            width: 375px;
+            padding: 8px;
+        }
+
+        .log {
+            font: 400 14px monospace;
+        }
+
+        .viz {
+            width: 600px;
+            height: 150px;
+            user-select: none;
+            margin: 1rem;
+        }
+
+        .vizLabel {
+            position: relative;
+            left: 30px;
+            top: -50px;
+            pointer-events: none;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="ui">
+
+        <button class="play item-inline">Start</button>
+
+        <label class="log-holder item-inline">
+            &nbsp;<span class="log"></span>
+        </label>
+
+        <label class="item">
+            <span class="desc">volume</span>
+            <input class="vol" type="range" value="1" min="0.01" max="1" step="0.01">
+            <span class="vol"></span>
+        </label>
+
+        <label class="item">
+            <span class="desc">bpm</span>
+            <input class="bpm" type="range" value="60" min="20" max="300" step="5">
+            <span class="bpm"></span>
+        </label>
+
+        <label class="item">
+            <span class="desc">swing</span>
+            <input class="swing" type="range" value="0" min="-1" max="1" step="0.01">
+            <span class="swing"></span>
+        </label>
+
+
+        <canvas class="item viz"></canvas>
+        <label class="vizLabel"></label>
+    </div>
+
+    <script src="bundle.js"></script>
+
+</body>
+
+</html>
