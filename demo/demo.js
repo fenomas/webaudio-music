@@ -1,9 +1,10 @@
 
-import Bind from 'bind.js'
 import Engine from '../src'
 import Manager from './lib/manager'
-
 import Viz from 'webaudio-viz'
+
+
+
 
 
 /*
@@ -12,24 +13,63 @@ import Viz from 'webaudio-viz'
  * 
 */
 
+var engine = new Engine()
+var manager = new Manager(engine)
 
-var engine, viz
+engine.volume = 0.75
+engine.swing = 0
+engine.bpm = 100
 
-function init() {
-    if (!engine) {
-        engine = new Engine()
-        engine.volume = state.volume
-        engine.swing = state.swing
-        engine.bpm = state.bpm
-        window.manager = new Manager(engine)
-    }
-    initViz()
+var togglePlaying = () => {
+    if (engine.context.state === 'suspended') engine.context.resume()
+    engine.playing = !engine.playing
+    vm.playMsg = (engine.playing) ? 'Stop' : 'Start'
+    vm.log = (engine.playing) ? '(playing)' : ''
 }
 
-setTimeout(init, 1)
 
 
 
+
+
+
+
+
+
+/*
+ * 
+ *      UI bindings
+ * 
+*/
+
+var Vue = window.Vue
+var vm = new Vue({
+    data: {
+        playMsg: 'Start',
+        volume: engine.volume,
+        swing: engine.swing,
+        bpm: engine.bpm,
+        log: '',
+        vizLabel: '(click to toggle visualizer)',
+    },
+    methods: {
+        setVolume: ev => { engine.volume = vm.volume },
+        setSwing: ev => { engine.swing = vm.swing },
+        setBPM: ev => { engine.bpm = vm.bpm },
+        play: () => togglePlaying(),
+        cycleViz: () => cycleViz(),
+    },
+}).$mount(`#ui`)
+
+
+
+// play on spacebar
+window.onkeydown = ev => {
+    if (ev.key === ' ') {
+        ev.preventDefault()
+        togglePlaying()
+    }
+}
 
 
 
@@ -43,79 +83,26 @@ setTimeout(init, 1)
 */
 
 
-var canvas = document.querySelector('.viz')
 var vizMode = 0
+var canvas = document.querySelector('.viz')
+var viz = new Viz(engine.context, canvas, engine.output, 20, 0)
+viz.paused = true
+viz.clear('#FFF')
 
-function initViz() {
-    if (!viz) {
-        viz = new Viz(engine.context, canvas, engine.output, 20, 0)
-        viz.paused = true
-        viz.clear('#FFF')
-        window.viz = viz
-    }
-}
-
-canvas.addEventListener('click', ev => {
-    initViz()
+function cycleViz() {
     vizMode = (vizMode + 1) % 4
     viz.mode = vizMode - 1
     viz.paused = (vizMode === 0)
     if (vizMode === 0) viz.clear('#FFF')
-    state.vizLabel = (vizMode === 0) ? '(click to toggle visualizer)' : ''
-})
-
-
-
-
-
-
-
-/*
- * 
- *      set up UI
- * 
-*/
-
-var $ = s => document.querySelector(s)
-
-// two-way bindings for params
-var setVolume = v => { if (engine) engine.volume = v }
-var setSwing = v => { if (engine) engine.swing = v }
-var setBPM = v => { if (engine) engine.bpm = v }
-
-var state = Bind({
-    playMsg: 'Start',
-    volume: 0.75,
-    swing: 0,
-    bpm: 100,
-    log: '',
-    vizLabel: '(click to toggle visualizer)',
-}, {
-    playMsg: '.play',
-    volume: { dom: '.vol', callback: setVolume },
-    swing: { dom: '.swing', callback: setSwing },
-    bpm: { dom: '.bpm', callback: setBPM },
-    log: '.log',
-    vizLabel: '.vizLabel',
-})
-
-
-
-// play button
-var togglePlaying = () => {
-    init()
-    engine.playing = !engine.playing
-    state.playMsg = (engine.playing) ? 'Stop' : 'Start'
-    state.log = (engine.playing) ? '(playing)' : '&nbsp;'
-}
-
-$('.play').onclick = togglePlaying
-window.onkeydown = ev => {
-    if (ev.key === ' ') {
-        ev.preventDefault()
-        togglePlaying()
-    }
+    vm.vizLabel = (vizMode === 0) ? '(click to toggle visualizer)' : ''
 }
 
 
+
+
+
+window.vm = vm
+window.viz = viz
+window.engine = engine
+window.manager = manager
 

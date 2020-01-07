@@ -11,7 +11,7 @@ musical logic is isolated into small modules that are
 so one can hack on the algorithms in realtime while the music plays.
 
 [Live demo](https://andyhall.github.io/webaudio-music/) ← what it sounds like 
-out of the box.
+out of the box (playing random nonmusical notes, for demo purposes).
 
 
 ## Usage
@@ -25,7 +25,9 @@ npm install
 npm start
 ```
 
-Now view the demo at `localhost:8080` or thereabouts, and start hacking.
+Now view the demo at `localhost:8080` or thereabouts, and start hacking. 
+Any edits you save to the song modules (in `/demo/song/`) should take effect 
+live in realtime, without reloading the page.
 
 
 ## Overview
