@@ -10,7 +10,7 @@ musical logic is isolated into small modules that are
 [hot-reloadable](https://webpack.js.org/concepts/hot-module-replacement/), 
 so one can hack on the algorithms in realtime while the music plays.
 
-[Live demo](https://andyhall.github.io/webaudio-music/) ← what it sounds like 
+[Live demo](https://fenomas.github.io/webaudio-music/) ← what it sounds like 
 out of the box (playing random nonmusical notes, for demo purposes).
 
 
